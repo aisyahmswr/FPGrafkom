@@ -5,6 +5,7 @@ var moveRight = false, moveLeft = false, moveUp = false, moveDown = false;
 var start = Date.now();
 var vertexDisplacement;
 var particleGeometry, vertices = [];
+var obstacleSpeed = 0.5;
 
 window.onload = function() {
     if (WEBGL.isWebGLAvailable()) {
@@ -26,7 +27,6 @@ function init() {
     var ambientLight = new THREE.AmbientLight( 0x404040, 1 );
     scene.add( ambientLight );
     loop = new THREEx.RenderingLoop();
-
     
     var light = new THREE.PointLight( 0xffffff, 5, 0);
     light.position.set( 3, 5, 0);
@@ -38,7 +38,10 @@ function init() {
    var cubeGeometry = new THREE.BoxGeometry(1, 1);
    var cubeMaterial = new THREE.MeshStandardMaterial(); 
 
-   var tunnelGeometry = new THREE.CylinderBufferGeometry(10, 10, 25, 20, 25, true);
+   var tunnelGeometry = new THREE.CylinderBufferGeometry(25, 0, 25, 20, 25, true);
+
+   var obstacleMaterial = new THREE.MeshBasicMaterial(0x00ffff);
+   var obstacleGeometry = new THREE.BoxGeometry();
 
    var uniforms = {
        delta: {value: 0},
@@ -73,16 +76,20 @@ function init() {
    scene.add(tunnel);
    tunnel.openEnded = true;
    tunnel.rotation.set(-99, 0, 0);
-   tunnel.position.set(0, 0, -8);
+   tunnel.position.set(0, 0, -10);
    console.log(tunnel);
 
+   obstacle = new THREE.Mesh(obstacleGeometry, obstacleMaterial);
+   scene.add(obstacle);
+
+   obstacle.position.set(0, 0, -70);
    var textureLoader = new THREE.TextureLoader();
 
    particleGeometry = new THREE.BufferGeometry();
    var sprite = textureLoader.load('bubble.png');
    vertices = [];
 
-   for ( var i = 0; i < 10000; i ++ ) {
+   for ( var i = 0; i < 4000; i ++ ) {
 
     var x = Math.random() * 2000 - 1000;
     var y = Math.random() * 2000 - 1000;
@@ -117,13 +124,15 @@ function init() {
         var time = Date.now() * 0.00005;
         shaderDelta += 0.1;
 
+        obstacle.position.z += obstacleSpeed;
+        if(obstacle.position.z > 20) obstacle.position.set(THREE.Math.randFloatSpread(5), THREE.Math.randFloatSpread(5), -70);
+
         for ( var i = 0; i < scene.children.length; i ++ ) {
 
             var object = scene.children[ i ];
 
             if ( object instanceof THREE.Points ) {
-                console.log(object);
-                if(object.position.z > 300) object.position.set(THREE.Math.randFloatSpread(0.5), THREE.Math.randFloatSpread(0.5), 0);
+                if(object.position.z > 300) object.position.set(THREE.Math.randFloatSpread(0.5), THREE.Math.randFloatSpread(0.5), -100);
                 else object.position.z += 10;
                 //object.rotation.z = time * ( i < 4 ? i + 1 : - ( i + 1 ) );
             }
