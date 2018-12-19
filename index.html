@@ -11,8 +11,12 @@
 	<script src="js/CheckBrowser.js"></script>
 	<script src="js/threex.loop.js"></script>
 	<script src="js/threex.collider.js"></script>
+	<script src="js/threex.collidersystem.js"></script>
+	<script src="js/threex.colliderhelper.js"></script>
 	<script src="js/threex.keyboardstate.js"></script>
 	<script src="js/dat.gui.min.js"></script>
+	<script src="js/GLTFLoader.js"></script>
+	<script src="js/Inflate.min.js"></script>
 
 	<script type="x-shader/x-vertex" id="vertexShader">
 
@@ -260,7 +264,9 @@
         
 	</head>
 	<body>
-        <canvas id="mainCanvas"></canvas>
+		<button id="resetButton" style="position: absolute; display: block; z-index: 99; left:50%; top: 50%">Resets</button>
+		<p id="score" style="position: absolute; display: block; z-index: 99; left:50%; top: 10%">Resets</p>
+		<canvas id="mainCanvas"></canvas>
 		<script src="js/main.js"></script>
 	</body>
 </html>
